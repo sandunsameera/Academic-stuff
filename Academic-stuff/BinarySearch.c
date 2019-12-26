@@ -17,8 +17,6 @@
         else
             rightmost = middle - 1; 
     } 
-
-     
     return -1; 
 } 
 
@@ -27,7 +25,7 @@ int linearSearch(int arr[],int n,int search){
   {
     if (arr[i] == search)
     {
-      printf("%d is present at location %d.\n", search, i);
+      printf("%d is present at index %d.\n", search, i);
       break;
     }
   }
@@ -96,9 +94,19 @@ int interpolationSearch(int arr[], int n, int x)
     return -1; 
 } 
 
+int comparisonFuncrion (const void * element1, const void * element2) 
+{
+    int first = *((int*)element1);
+    int second = *((int*)element2);
+    if (first > second) return  1;
+    if (first < second) return -1;
+    return 0;
+}
+
+
  int main(){
      int arr[] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 
-				34, 55, 89, 144, 233, 377, 610 }; 
+				34, 55, 89, 144, 233, 377 };
      int searchtype;
 
      printf("-------------Welcome !!----------------\n");
@@ -108,7 +116,9 @@ int interpolationSearch(int arr[], int n, int x)
      printf("Enter 4 for interpolation search\n");
      scanf("%i",&searchtype);
     int n = sizeof(arr) / sizeof(arr[0]); 
-    int x = 13; 
+    int x = 21; 
+
+    qsort(arr,sizeof(arr)/sizeof(*arr),sizeof(*arr),comparisonFuncrion);
 
      switch (searchtype)
      {
