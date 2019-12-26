@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<math.h>
+#include<stdlib.h>
     int result;
     int i;
 
@@ -26,7 +27,7 @@ int linearSearch(int arr[],int n,int search){
   {
     if (arr[i] == search)
     {
-      printf("%d is present at location %d.\n", search, i+1);
+      printf("%d is present at location %d.\n", search, i);
       break;
     }
   }
@@ -37,29 +38,37 @@ int linearSearch(int arr[],int n,int search){
 
 }
 
-int jumpSearch(int arr[], int x, int n) 
+int jumpSearch(int arr[],int n,int x)
 { 
-	int step = sqrt(n); 
-
-	int prev = 0; 
-	// while (arr[min(step, n)-1] < x) 
-	{ 
-		prev = step; 
-		step += sqrt(n); 
-		if (prev >= n) 
-			return -1; 
-	} 
-
-	while (arr[prev] < x) 
-	{ 
-		prev++; 
-		// if (prev == min(step, n)) 
-			return -1; 
-	} 
-	if (arr[prev] == x) 
-		return prev; 
-
-	return 0; 
+	int root = sqrt(n); 
+	int prev =0; 
+  int step=0;
+  int location=0;
+  
+  for (int i = 0; i < n; i++)
+  {
+    if (root*i*step<=x)
+    {
+      step++;
+    }
+    else
+    {
+      prev = root*(i-1);
+      location = prev;
+      for (int j = prev; j <=prev+root ; j++)
+      {
+          location++;
+        if (arr[j] == x)
+        {
+          printf("%d is present in the array in the location of %d.\n",x,location);
+          exit(0);
+        }
+ 
+      }            
+    }
+  }
+  printf("Element not found in array.\n");
+  
 } 
 
  int main(){
@@ -87,10 +96,6 @@ int jumpSearch(int arr[], int x, int n)
     break;
 
     case 3: result=jumpSearch(arr,n,x);
-    (result == -1) ? printf("Element is not present in array\n"): printf("Element is present at index %d\n",result);
-    break;
-
-     
      default:
          break;
      }
