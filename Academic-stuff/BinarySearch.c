@@ -71,6 +71,31 @@ int jumpSearch(int arr[],int n,int x)
   
 } 
 
+int interpolationSearch(int arr[], int n, int x) 
+{  
+    int lowEnd = 0, highEnd = (n - 1); 
+
+    while (lowEnd <= highEnd && x >= arr[lowEnd] && x <= arr[highEnd]) 
+    { 
+        if (lowEnd == highEnd){ 
+            if (arr[lowEnd] == x) return lowEnd; 
+            return -1; 
+        } 
+        int pos = lowEnd + (((double)(highEnd-lowEnd) / 
+              (arr[highEnd]-arr[lowEnd]))*(x - arr[lowEnd])); 
+  
+        if (arr[pos] == x) 
+            return pos; 
+  
+        if (arr[pos] < x) 
+            lowEnd = pos + 1; 
+  
+        else
+            highEnd = pos - 1; 
+    } 
+    return -1; 
+} 
+
  int main(){
      int arr[] = { 0, 1, 1, 2, 3, 5, 8, 13, 21, 
 				34, 55, 89, 144, 233, 377, 610 }; 
@@ -96,11 +121,16 @@ int jumpSearch(int arr[],int n,int x)
     break;
 
     case 3: result=jumpSearch(arr,n,x);
+
+    case 4: result = interpolationSearch(arr, n, x);
+
+    if (result!= -1) 
+        printf("Element found at index %d\n", result); 
+    else
+        printf("Element not found."); 
      default:
          break;
      }
-
-    
     return 0; 
  }
 
