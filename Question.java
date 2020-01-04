@@ -1,6 +1,8 @@
 import java.util.*;
 
 public class Question {
+    static int[][] hashTable = new int[11][2];
+
     public static void main(String[] args) {
 
         int array[] = new int[] { 962712, 308682, 203292, 368620, 315274, 425493, 258944, 681200, 626376, 876039,
@@ -12,30 +14,20 @@ public class Question {
     }
 
     static void _hashFunction(int arr[]) {
-        int n = 31;
+        int n = 11;
+        int cols =2;
 
-        int [][] hashedtable = new int [31][2];
         for (int i = 0; i < arr.length; i++) {
-            int hashedvalue = (arr[i] % 31); // 0-11 between values
+            int hashedvalue = (arr[i] % n); // 0-11 between values
             System.out.println(hashedvalue + " - " + arr[i]);
 
-            for (int k = 0; k < arr.length; k++) {
-                hashedtable = new int[hashedvalue][arr[i]];
-            }
-            for(int h=0;h<31;h++){
-                for(int j=0;j<2;j++){
-                    System.out.println(hashedtable[h][j]);
-                }
-            }
-        }
-
-    }
-
-    static void _isduplicate(int arr[]) {
-        for (int k = 0; k < arr.length; k++) {
-            for (int j = k + 1; j < arr.length; j++) {
-                if (arr[k] == (arr[j])) {
-                    System.out.println(arr[k]);
+            for(int l=0;l<n;l++){
+                System.out.println("l");
+                for(int k=0;k<cols;k++){
+                    System.out.println("l");
+                    hashTable[l][k] = hashTable[hashedvalue][arr[i]];
+                    System.out.println("l");
+                    
                 }
             }
         }
