@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Question {
-    static int[][] hashTable = new int[31][2];
+    static int[] hashTable = new int[23]; 
 
     public static void main(String[] args) {
 
@@ -14,17 +14,21 @@ public class Question {
     }
 
     static void _hashFunction(int arr[]) {
-        int n = 11;
-
+        int n = 23;
         for (int i = 0; i < arr.length; i++) {
             int hashedvalue = (arr[i] % n); // 0-11 between values
-            // System.out.println(hashedvalue + " - " + arr[i]);
-            hashTable[i][0] = hashedvalue;
-            hashTable[i][1] = arr[i];
+            System.out.println(hashedvalue + " - " + arr[i]);
+
+            
+            for(int k =i+1;k<arr.length;k++){
+                int temp = hashedvalue;
+                if(hashedvalue == temp){
+                    System.out.println("Duplicate found "+ temp);
+                    break;
+                }
+            }
         }
 
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println(hashTable[i][0]+"-"+hashTable[i][1]);
-        }
+        
     }
 }
