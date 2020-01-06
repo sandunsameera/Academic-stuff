@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Question {
-    static int[][] hashTable = new int[11][2];
+    static int[][] hashTable = new int[31][2];
 
     public static void main(String[] args) {
 
@@ -15,21 +15,16 @@ public class Question {
 
     static void _hashFunction(int arr[]) {
         int n = 11;
-        int cols =2;
 
         for (int i = 0; i < arr.length; i++) {
             int hashedvalue = (arr[i] % n); // 0-11 between values
-            System.out.println(hashedvalue + " - " + arr[i]);
+            // System.out.println(hashedvalue + " - " + arr[i]);
+            hashTable[i][0] = hashedvalue;
+            hashTable[i][1] = arr[i];
+        }
 
-            for(int l=0;l<n;l++){
-                System.out.println("l");
-                for(int k=0;k<cols;k++){
-                    System.out.println("l");
-                    hashTable[l][k] = hashTable[hashedvalue][arr[i]];
-                    System.out.println("l");
-                    
-                }
-            }
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(hashTable[i][0]+"-"+hashTable[i][1]);
         }
     }
 }
