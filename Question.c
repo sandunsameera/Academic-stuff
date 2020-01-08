@@ -15,6 +15,6 @@ void hashFunction(int arr[]){
     int n = 23;
     for (int i = 0; i < 31; i++) {
             int hashedvalue = (arr[i] % n); // 0-11 between values
-            printf("%d\n",hashedvalue);
+            printf("%d - %d\n",hashedvalue,arr[i]);
         }
 }
