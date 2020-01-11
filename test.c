@@ -51,7 +51,31 @@ int main(){
             ptr = ptr->next;
         }
         printf("\n");
-        
+    }
+
+    for (int i = 0; i < sizeof(sums); i++)
+    {
+        for (int k = 0; k < sizeof(numarray); k++)
+        {
+            int secondnumber = (sums[i]- numarray[k]);
+            if (secondnumber>0)
+            {
+            // printf("%d - %d\n",i,secondnumber);
+            int hashedsecondNumber=hash(secondnumber);
+            // printf("%d - %d\n",hashedsecondNumber,secondnumber);
+                node* ptr = &array[hashedsecondNumber];
+                while (ptr->next != NULL){
+                    if(ptr->value == secondnumber){
+
+                printf("found");
+                    }
+                ptr = ptr->next;
+        }
+            
+            break;
+            }
+        }
         
     }
+    
 }
