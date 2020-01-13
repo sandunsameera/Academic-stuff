@@ -3,7 +3,8 @@
 
 typedef struct Node node;
 
-int flag ;
+int flag;
+int found = 0;
 
 struct Node
 {
@@ -12,7 +13,7 @@ struct Node
 };
 
 int hash(int num){
-    num = num%7;
+    num = num%101;
     return num;
 }
 
@@ -24,24 +25,22 @@ int read_text_file(int arr[]){
   if (file){
       while ((c = fgetc(file))!=EOF){
       fscanf(file, "%d", &c);
-    //   printf("%d\n",c);
       arr[i] = c;
-    //   printf("%d\n",i,arr[i]);
       i++;
-      }
+    }
       fclose(file);
   }
 }
 
 int main(){
-    node array[7];
-    for(int i=0;i<7;i++){
+    node array[101];
+    for(int i=0;i<101;i++){
         array[i].value = NULL;
     }
     int numarray[100000];
     read_text_file(numarray);
 
-    int sums[] = { 31552, 234756, 596873, 648219, 726312, 981237, 988331, 1277361, 1283379 };
+    int sums[] = {231552,234756,596873,648219,726312,981237,988331,1277361,1283379 };
 
     for(int i=0 ; i<100000;i++){
         
@@ -59,45 +58,51 @@ int main(){
             }
             ptr->next = newNode;
         }
-
     }
+
     //print hashtable
-    for(int i = 0; i < 10001; i++){
-        // printf("%d ",i);
+    for(int i = 0; i < 101; i++){
+        printf("\n\n");
+        printf("index %d ---\n ",i);
+        printf("\n\n");
         node* ptr = &array[i];
         while (ptr->next != NULL){
-            // printf("%d ",ptr->value);
+            printf("%d ",ptr->value);
             ptr = ptr->next;
         }
-        // printf("\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------");
+        printf("\n");
     }  
 
     for (int i = 0; i < 9; i++)
-    {
-        for (int k = 0; k < 100000; k++)
-        {
+    {   found = 0;
+        for (int k = 0; k < 100000; k++){
+            if(found == 0){
             int secondnumber = (sums[i] - numarray[k]);
             if (secondnumber>0)
             {
             int hashedSecondNumber = hash(secondnumber);
-            node* ptr =&array[i];
-            if (ptr->value == secondnumber)
-            {
-                flag =1;
-            }else
-            {
-                ptr = ptr->next;
-                flag =0;
+            node* ptr;
+            ptr = array;
+            for(int i=0;i<hashedSecondNumber;i++){
+                ptr++;
             }
-        }
-            
+            ptr = ptr->next;
+            while (ptr->next != NULL){
+                if(ptr->value == secondnumber){
+                    printf("1");
+                    ptr = ptr->next;
+                    found = 1;
+                }else{
+                    ptr = ptr->next;
+                }
+            }
+        }   
+      }
     }
-
-        if (flag ==0){
-            printf("%d",0);
-        }
-        else{
-            printf("%d",1);   
-        }
+    if(found == 0){
+        printf("0");
+    }
+    
     }
 }
