@@ -40,13 +40,13 @@ int main(){
     int numarray[100000];
     read_text_file(numarray);
 
-    int sums[] = {231552,234756,596873,648219,726312,981237,988331,1277361,1283379 };
+    int sums[] = {231552,234756,596873,648219,726312,981237,988331,1277361,1283379};
 
     for(int i=0 ; i<100000;i++){
-        
-        if(array[hash(numarray[i])].value == NULL){
-            array[hash(numarray[i])].value = numarray[i];
-            array[hash(numarray[i])].next = NULL;
+        int hashing_index = hash(numarray[i]);
+        if(array[hashing_index].value == NULL){
+            array[hashing_index].value = numarray[i];
+            array[hashing_index].next = NULL;
         }else{
             node* newNode = (node*)malloc(sizeof(node));
             newNode->value = numarray[i];
@@ -59,20 +59,6 @@ int main(){
             ptr->next = newNode;
         }
     }
-
-    //print hashtable
-    for(int i = 0; i < 101; i++){
-        printf("\n\n");
-        printf("index %d ---\n ",i);
-        printf("\n\n");
-        node* ptr = &array[i];
-        while (ptr->next != NULL){
-            printf("%d ",ptr->value);
-            ptr = ptr->next;
-        }
-        printf("------------------------------------------------------------------------------------------------------------------------------------------");
-        printf("\n");
-    }  
 
     for (int i = 0; i < 9; i++)
     {   found = 0;
@@ -103,6 +89,5 @@ int main(){
     if(found == 0){
         printf("0");
     }
-    
     }
 }
