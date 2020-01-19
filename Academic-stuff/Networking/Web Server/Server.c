@@ -7,17 +7,16 @@
 #include <ctype.h>
 
 #define PORT 4800
-char *mime_type;
+char *init_mg = "Hello Server";
+char buffer[30000] = {0};
+char *Mimi_Type;
 
- int server_fd, new_socket; long valread;
-    struct sockaddr_in address;
-    int addrlen = sizeof(address);
-
-    char buffer[30000] = {0};
-    char *fuck = "Hello fuck";
+ int Server, new_socket; long Read_Value;
+ struct sockaddr_in sock_address;
+ int addrlen = sizeof(sock_address);
 
 void make_socket(){
-    if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    if ((Server = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     {
         perror("Error in socket");      //Making the socket
         exit(EXIT_FAILURE); 
@@ -25,7 +24,7 @@ void make_socket(){
 }
 
 void bind_socket(){
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) == -1)
+    if (bind(Server, (struct sockaddr *)&sock_address, sizeof(sock_address)) == -1)
     {
         perror("Error In bind");
         exit(EXIT_FAILURE);
@@ -33,15 +32,14 @@ void bind_socket(){
 }
 
 void listner(){
-    if (listen(server_fd, 10) <  0)       
+    if (listen(Server, 10) <  0)       
     {
         perror("In listen");
         exit(EXIT_FAILURE);
     }
 }
 
-void send_responce(int fd, char *header, void *body,int contentLength) {
-  
+void SendResponse(int fd, char *header, void *body,int contentLength) {
   char response[contentLength+100]; 
   int response_length = sprintf(response,
                 "%s\n"
@@ -51,31 +49,28 @@ void send_responce(int fd, char *header, void *body,int contentLength) {
                 "\n",
                 header,
                 contentLength, 
-                mime_type);
-
+                Mimi_Type);
   memcpy(response + response_length, body, contentLength); 
   send(fd, response, response_length + contentLength, 0); 
 
 }
 
-void send_file(int fd, char *file_name){
-    
-    
-    char *source;
-    FILE *file = fopen(file_name, "r");
+void SendFile(int fd, char *FileName){
+    char *entry;
+    FILE *file = fopen(FileName, "r");
     size_t bufsize;
     if (file != NULL) {
         if (fseek(file, 0L, SEEK_END) == 0) {
             bufsize = ftell(file);  
-            source = malloc(sizeof(char) * (bufsize + 1));
+            entry = malloc(sizeof(char) * (bufsize + 1));
             fseek(file, 0L, SEEK_SET);    
-            fread(source, sizeof(char), bufsize, file);
-            send_responce(fd,"HTTP/1.1 200 OK", source, bufsize);   
+            fread(entry, sizeof(char), bufsize, file);
+            SendResponse(fd,"HTTP/1.1 200 OK", entry, bufsize);   
         }
     }else{
         char *error = "file not found";
-        mime_type = "text/html";
-        send_responce(fd, "HTTP/1.1 404 NOT FOUND", error, strlen(error));
+        Mimi_Type = "text/html";
+        SendResponse(fd, "HTTP/1.1 404 NOT FOUND", error, strlen(error));
     }
   
 }
@@ -87,11 +82,11 @@ int main(int argc, char const *argv[])
     char requestpath[1024];
 
     make_socket();
-    address.sin_family = AF_INET;  
-    address.sin_addr.s_addr = INADDR_ANY;        
-    address.sin_port = htons( PORT );
+    sock_address.sin_family = AF_INET;  
+    sock_address.sin_addr.s_addr = INADDR_ANY;        
+    sock_address.sin_port = htons( PORT );
     
-    memset(address.sin_zero, '\0', sizeof address.sin_zero);
+    memset(sock_address.sin_zero, '\0', sizeof sock_address.sin_zero);
 
     bind_socket();
     listner();
@@ -100,7 +95,7 @@ int main(int argc, char const *argv[])
     while(1)
     {
         printf("\n+++++++ Waiting for new connection ++++++++\n\n");
-        if ((new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t*)&addrlen))<0)
+        if ((new_socket = accept(Server, (struct sockaddr *)&sock_address, (socklen_t*)&addrlen))<0)
         {
             perror("In accept");
             exit(EXIT_FAILURE);
@@ -113,16 +108,16 @@ int main(int argc, char const *argv[])
         char *name = strtok(requestpath, "/");
 
         if(mime)
-            mime_type = mime;
+            Mimi_Type = mime;
         else
-            mime_type = NULL;
+            Mimi_Type = NULL;
 
         if (!strcmp(requestType, "GET") && !strcmp(requestpath, "/")) {
             char *data = "You made a GET request";
-            mime_type = "text/html";
-            send_responce(new_socket, "HTTP/1.1 200 OK", data, strlen(data));
+            Mimi_Type = "text/html";
+            SendResponse(new_socket, "HTTP/1.1 200 OK", data, strlen(data));
         }else{
-            send_file(new_socket,name);
+            SendFile(new_socket,name);
         } 
         printf("------------------Response sent from server-------------------");
     }
