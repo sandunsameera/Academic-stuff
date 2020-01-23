@@ -39,9 +39,9 @@ void listner(){
     }
 }
 
-void SendResponse(int fd, char *header, void *body,int contentLength) {
+void SendResponse(int fd, char *header, void *body,int contentLength){
   char response[contentLength+100]; 
-  int response_length = sprintf(response,
+  int response_length = sprintf(response,  //sprintf similar to prontf but return the string
                 "%s\n"
                 "Connection: close\n"
                 "Content-Length: %d\n"
@@ -50,18 +50,17 @@ void SendResponse(int fd, char *header, void *body,int contentLength) {
                 header,
                 contentLength, 
                 Mimi_Type);
-  memcpy(response + response_length, body, contentLength); 
-  send(fd, response, response_length + contentLength, 0); 
-
+  memcpy(response + response_length, body, contentLength); //copy block of memory from a location to another
+  send(fd, response, response_length + contentLength, 0); //transmit message to another socket
 }
 
 void SendFile(int fd, char *FileName){
     char *entry;
-    FILE *file = fopen(FileName, "r");
+    FILE *file = fopen(FileName, "r");  //fopen - open file
     size_t bufsize;
     if (file != NULL) {
-        if (fseek(file, 0L, SEEK_END) == 0) {
-            bufsize = ftell(file);  
+        if (fseek(file, 0L, SEEK_END) == 0) {  //fseek - sets the file position of the sream to given offset
+            bufsize = ftell(file);  //return current position of file
             entry = malloc(sizeof(char) * (bufsize + 1));
             fseek(file, 0L, SEEK_SET);    
             fread(entry, sizeof(char), bufsize, file);
@@ -72,7 +71,6 @@ void SendFile(int fd, char *FileName){
         Mimi_Type = "text/html";
         SendResponse(fd, "HTTP/1.1 404 NOT FOUND", error, strlen(error));
     }
-  
 }
 
 
@@ -86,7 +84,7 @@ int main(int argc, char const *argv[])
     sock_address.sin_addr.s_addr = INADDR_ANY;        
     sock_address.sin_port = htons( PORT );
     
-    memset(sock_address.sin_zero, '\0', sizeof sock_address.sin_zero);
+    memset(sock_address.sin_zero, '\0', sizeof sock_address.sin_zero); //memset() is used to fill a block of memory with a particular value.
 
     bind_socket();
     listner();
@@ -101,18 +99,18 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
 
-        read(new_socket,buffer,1024);
+        read(new_socket,buffer,1024); //reads data previously written to a file
         sscanf(buffer, "%s %s", requestType, requestpath);
         
-        char *mime = strrchr(requestpath, '.')+1;
-        char *name = strtok(requestpath, "/");
+        char *mime = strrchr(requestpath, '.')+1;  //return last occurence in string
+        char *name = strtok(requestpath, "/"); // split string to token
 
         if(mime)
             Mimi_Type = mime;
         else
             Mimi_Type = NULL;
 
-        if (!strcmp(requestType, "GET") && !strcmp(requestpath, "/")) {
+        if (!strcmp(requestType, "GET") && !strcmp(requestpath, "/")) {  // compare two string character by character
             char *data = "You made a GET request";
             Mimi_Type = "text/html";
             SendResponse(new_socket, "HTTP/1.1 200 OK", data, strlen(data));
