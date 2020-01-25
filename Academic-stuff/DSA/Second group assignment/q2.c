@@ -12,10 +12,6 @@ char jobID[2];
 struct job temp;
 int best_index =0;
 int next_index =1;
-// int bestJobIndex =0;
-
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-
 
 void sort_struct_array(struct job arr[]){
     for(int a=0;a<7;a++){
@@ -49,24 +45,21 @@ int main(int argc, char const *argv[]){
     
 
     while (next_index < 8){
-        // bestJob1 = array[best_index].profit;
-        // printf("\n");
-        strcpy(jobID,array[best_index].jobId);
+        temp = array[best_index];
         if (array[best_index].deadline == array[next_index].deadline){
             if (array[best_index].profit>array[next_index].profit){
-                bestJob1 = array[best_index].profit;
-                strcpy(jobID,array[best_index].jobId);
+                temp = array[best_index];
                 next_index++;
                
             }else{
                 best_index = next_index;
-                bestJob1 = array[best_index].profit; 
+                temp = array[best_index];
                 next_index++;
             }
 
         }else{
-                // printf("%d\t",bestJob1);
-                printf("%s\t",jobID);
+                printf("%c",array[best_index].jobId[0]);
+                printf("%c\t",array[best_index].jobId[1]);
                 best_index = next_index;
                 next_index++;
                
