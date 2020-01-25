@@ -7,25 +7,34 @@ struct job{
     int profit;
 };
 
-int bestJob;
-int searched;
-int lowest_deadline = 100;
-char Id[2];
-int pro;
+int bestJob1;
+char jobID[2];
+struct job temp;
+int best_index =0;
+int next_index =1;
+// int bestJobIndex =0;
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
 
-int comparator(const void *p, const void *q)  
-{ 
-    int l = ((struct job *)p)->deadline; 
-    int r = ((struct job *)q)->deadline;  
-    return (l - r); 
-} 
+void sort_struct_array(struct job arr[]){
+    for(int a=0;a<7;a++){
+        for(int b=a+1;b<7;b++){
+            if(arr[a].deadline>arr[b].deadline)
+            {
+                temp=arr[a];
+                arr[a]=arr[b];
+                arr[b]=temp;
+            }
+        }
+
+        printf("%d\t",arr[a].profit);
+    }
+        printf("\n");
+}
 
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]){
     job array[7] = {
         {"J1",2,90},
         {"J2",2,20},
@@ -33,36 +42,34 @@ int main(int argc, char const *argv[])
         {"J4",1,30},
         {"J5",4,65},
         {"J6",1,35},
-        {"J7",3,50}
+        {"J7",3,50},
     };
 
-    job sorted_array[7];
+    sort_struct_array(array);
+    
 
-    for (int i = 0; i <7; i++){
-        for (int k = i; k < 7; k++)
-        {
-            // lowest_deadline = array[0].deadline;
-            if (lowest_deadline<array[i].deadline)
-            {
-                lowest_deadline = array[k].deadline;
-                printf("%d\n",lowest_deadline);
-                strcpy(Id,array[k].jobId);
-                pro = array[k].profit;
-
+    while (next_index < 8){
+        // bestJob1 = array[best_index].profit;
+        // printf("\n");
+        strcpy(jobID,array[best_index].jobId);
+        if (array[best_index].deadline == array[next_index].deadline){
+            if (array[best_index].profit>array[next_index].profit){
+                bestJob1 = array[best_index].profit;
+                strcpy(jobID,array[best_index].jobId);
+                next_index++;
+               
+            }else{
+                best_index = next_index;
+                bestJob1 = array[best_index].profit; 
+                next_index++;
             }
-            
-        }
 
-        sorted_array[i].deadline = lowest_deadline;
-        strcpy(sorted_array[i].jobId,Id);
-        sorted_array[i].profit = pro;
-        
-        
+        }else{
+                // printf("%d\t",bestJob1);
+                printf("%s\t",jobID);
+                best_index = next_index;
+                next_index++;
+               
+        }
     }
-    for (int i = 0; i < 7; i++)
-    {
-        printf("%d\n",sorted_array[i].deadline);
-    }
-    
-    
 }
